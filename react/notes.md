@@ -272,28 +272,156 @@
       - drawback: 
         - class names cannot be hyphenated
           - use camelCase instead
-    ```css
-    /* MyButtonComponent.module.css */
-    .btn {
-        padding: 12px 15px; 
-        font-family: Arial, sans-serif; 
-        font-weight: bold;
-        background: linear-gradient(30deg, rebeccapurple, magenta); 
-        color: #fff; 
-        border: none;
-    }
+      ```css
+      /* MyButtonComponent.module.css */
+      .btn {
+          padding: 12px 15px; 
+          font-family: Arial, sans-serif; 
+          font-weight: bold;
+          background: linear-gradient(30deg, rebeccapurple, magenta); 
+          color: #fff; 
+          border: none;
+      }
+      ```
+      ```js
+      // MyButtonComponent.js
+      import React, { Component } from 'react';
+      import styles from './MyButtonComponent.module.css';
+      
+          
+      class MyButton extends Component {
+          render() {
+              return <button className={ styles.btn }>{ props.children }</button>;
+          }
+      }
+          
+      export default MyButton;
+      ```
+- CSS in JS
+  - CSS modules are in essence still regular CSS files
+    - difficult to dynamically specify style properties
+  - Alternative: Styled Components
+    - library to enable CSS in JS
+    - install the following package to utilize it
     ```
-    ```js
-    // MyButtonComponent.js
-    import React, { Component } from 'react';
-    import styles from './MyButtonComponent.module.css';
+    npm install styled-components
+    ```
+    - `src/components/StyledBox.js`
+      - to dynamically style a css property, use a callback function that takes in props and returns the desired props variable
+      - `||` operator is the fallback value if the props variable is undefined (not specified)
+      - the following example is a styled div
+    ``` js
+    import React from 'react';
+    import styled from 'styled-components'; // import from the installed module
     
-        
-    class MyButton extends Component {
-        render() {
-            return <button className={ styles.btn }>{ props.children }</button>;
-        }
-    }
-        
-    export default MyButton;
+    const StyledBox = styled.div`
+        border: 1px solid lightgray;
+        background: ${props => props.bgColor};
+        width: ${props => props.width || '100px'};  
+        height: ${props => props.height || '100px'};
+    `;
+    
+    export default StyledBox;
     ```
+    - `src/components/SomeOtherComponent.js`
+    ```js
+    import React from 'react';
+    
+    import StyledBox from './StyledBox';
+    
+    const SomeOtherComponent = () => (
+        <div>
+            <StyledBox bgColor="blue"/>
+            <StyledBox bgColor="red" height="200px"/>
+        </div>
+    )
+    
+    export default SomeOtherComponent;
+    ```
+  - Option 2 Styletron:
+    ```
+    npm install styletron-react
+    npm install styletron-engine-atomic
+    ```
+    - `src/App.js`
+    ``` js
+    import React from 'react';
+    
+    import { Provider } from 'styletron-react';
+    
+    import { Client as Styletron } from 'styletron-engine-atomic';
+    
+    const engine = new Styletron();
+    
+    function App() {
+        return (
+            <Provider value={engine}>
+                {/* your other components go in here */}
+            </Provider>
+        )
+    }
+    
+    export default App;
+    ```
+    - `src/components/StyledBox.js`
+    ```js
+    import React from 'react'; 
+    import { styled } from 'styletron-react';
+    
+    const StyledBox = styled('div', props => ({
+        border: '1px solid lightgray',
+        background: props.$bgColor,
+        width: props.$width || '100px',
+        height: props.$height || '100px',
+    
+        display: 'none',
+    
+        ['@media and (min-width: ' + (props.$minWidth || '500px') + ')']: {
+            display: 'block'
+        }
+    }));
+    
+    export default StyledBox;
+    ```
+    - `src/components/SomeOtherComponent.js`
+    ```js
+    import React from 'react';
+    
+    import StyledBox from './StyledBox';
+    
+    const SomeOtherComponent = () => (
+        <div>
+            <StyledBox $bgColor="blue"/>
+            <StyledBox $bgColor="red" $height="200px" $minWidth="1200"/>
+        </div>
+    )
+    
+    export default SomeOtherComponent;
+    ```
+- useRef
+  - React uses Virtual DOM
+    - "diffing": comparing Virtual DOM to actual DOM
+      - makes decisions on when to re-render parts of app
+  - We can use a ref attribute to obtain reference to a specific DOM node(element)
+    - the variable name saved to `useRef()` should match name in `ref` attribute
+
+    ```js
+    import React, { useRef } from 'react';
+    
+    export default () => {
+        const input = useRef();
+    
+        function focusInput() {
+            input.current.focus();
+        }
+    
+        return (
+            <>
+                <input ref={input}/>
+                <button onClick={focusInput}>Focus Me!</button>
+            </>
+        );
+    }
+    ```
+  - can also be used to access a stateful value
+    - it will dynamically change to the new object as state changes
