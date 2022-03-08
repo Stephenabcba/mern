@@ -447,4 +447,46 @@
   }
   export default PersonCard;
   ```
-- 
+- useState
+  - Hooks:
+    - a function that allows us to use a certain piece of functionality
+      - the function could be built-in or custom
+  - State in functional components
+    - state is available through useState
+    - after state is initiated, behavior is same as state in classes
+      - here, state is instantiated as an object with attributes
+    ``` js
+    import React, { useState } from 'react';
+        
+        
+    const Counter = props => {
+        const [state, setState] = useState({
+            clickCount: 0
+        });
+    
+        const handleClick = () => {
+            setState({
+                clickCount: state.clickCount + 1
+            });
+        }
+    
+        return (
+            <div>
+                { state.clickCount }
+                <button onClick={ handleClick }>Click Me</button>
+            </div>
+        );
+    }
+        
+    export default Counter;
+    ```
+    - alternatively, a primitive value can be passed in and the destructured variable can be accessed directly
+    ``` js
+    const [count, setCount] = useState(0);
+    
+    const handleClick = () => {
+        setCount(count + 1);
+    }
+    ```
+- Forms
+  - 
