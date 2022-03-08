@@ -75,15 +75,61 @@
   - if we want to return multiple html tags, wrap them in a JSX fragment, which looks like an empty HTML tag: `<> </>`
   - if we want to add HTML classes to the tags, use `className="my-class"`
   - `label for` becomes `label htmlFor`
+## Class Components
+- Class Components
+  - previously, we created functional components (the components were function return statements)
+  - we can also create component classes
+  - **3 requirements for a valid react component class**:
+    - name must start with a capital letter
+    - must extend React.Component
+    - must have render() method that returns a react element from React.createElement() or JSX
+  - in `src/components/SomeClassComponent.js`
     ```js
-    class App extends Component {
+    import React, { Component } from 'react';
+        
+    class SomeClassComponent extends Component {
         render() {
-            return (
-                <>
-                    <h1 className="my-class">Hello World</h1>
-                    <p>more text</p>
-                </>
-            );
+            return <div>This is our first class component.</div>;
         }
+    }
+        
+    export default SomeClassComponent;
+    ```
+  - in `src/App.js`
+    ```js
+    import SomeClassComponent from `./components/SomeClassComponent'
+
+    //... somewhere inside the return statement of function App(){ }
+    <SomeClassComponent/>
+    ```
+- Props
+  - short for properties
+  - by default, props is passed as an empty object
+  - to add props, we can add attributes to the JSX element in `App`
+  - when adding attributes, curly brackets denote a JavaScript expression
+    - we can send numbers, strings, functions, objects, etc with curly braces
+    - string values can be directly assigned without curly brackets
+    - many other datatypes **require** curly brackets
+    - all items can be wrapped in curly brackets, so when in doubt, use curly braces.
+  - in `src/App.js`
+    ```
+    <SomeClassComponent prop1={propValue1} prop2={propValue2}/>
+    ```
+  - Props will be tranlated into:
+    ```js
+    // this is automatically created by React, this is just a visualization
+    let props = {
+        prop1: propValue1,
+        prop2: propValue2,
+    }
+    ```
+  - in `src/components/SomeClassComponent.js`
+    ```js
+    render() {
+        return (
+            //...other stuff
+            <h1>Property 1 has value of {this.props.prop1}</h1>
+            <h2>Property 2 has value of {this.props.prop2}</h2>
+        )
     }
     ```
