@@ -106,6 +106,7 @@
   - short for properties
   - by default, props is passed as an empty object
   - to add props, we can add attributes to the JSX element in `App`
+  - props can be desctructured before the `return` statement within `render() { }`
   - when adding attributes, curly brackets denote a JavaScript expression
     - we can send numbers, strings, functions, objects, etc with curly braces
     - string values can be directly assigned without curly brackets
@@ -117,7 +118,7 @@
     ```
   - Props will be tranlated into:
     ```js
-    // this is automatically created by React, this is just a visualization
+    // this object is automatically created by React, this is just a visualization
     let props = {
         prop1: propValue1,
         prop2: propValue2,
@@ -133,3 +134,42 @@
         )
     }
     ```
+- Children
+  - children are tags within the body of a React component tag
+  - we can customize the position of children inside the component file using `{this.props.children}`
+- Synthetic Events
+  - custom event listeners in React
+  - event names are camelCased instead of lowercase
+    - onClick instead of onclick
+  - event handlers are passed as functions instead of strings in HTML
+  - we can either write anonymous functions inside jsx portions, or we can call a method in MyComponent class to handle the event
+    - we will have to write the methods ourselves
+  - to prevent event from bubbling, we must use `event.stopPropagation()` or `event.preventDefault()`
+    - returning false would not work
+  - Events cannot be called asynchronously
+    - React "pools" the Synthetic events
+  - ex: `<button onClick={ ()=> alert("This button has been clicked!") }>Click Me</button>`
+  - common events:
+    - `onClick` : when something is clicked
+    - `onChange` : when a form input is changed
+    - `onSubmit` : when a form is submitted
+    - `onFocus` : when an element is focused (clicked on or tabbed to)
+    - `onBlur` : when element loses focus
+- State
+  - components can hold on to their own information using `this.state`
+    - state is an object that is an attribute to the component class
+  - we will need to modify the constructor to initialize state
+  - to access state, we can use `this.state.stateVar`
+  - to modify state, we will need to utilize `this.setState({stateVar: "newStateVal"})`
+    - changing state variables using reassignment will not work
+  - to toggle state, we can create an if statement to perform different actions depending on state
+``` js
+class MyComponent extends Component {
+    constructor(props) {
+        super(props); // retain all the functionality defined from constructor of Component class
+        this.state = { // initialize state
+            stateVar1: "stateVal1",
+            stateVar2: "stateVal2"
+        }
+    }
+}
