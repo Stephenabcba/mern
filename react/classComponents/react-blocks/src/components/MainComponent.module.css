@@ -1,0 +1,7 @@
+.main {
+    background-color: #e06666;
+    width: calc(80% - 60px);
+    height: calc(80% - 60px);
+    padding: 20px;
+    display:inline-block
+}

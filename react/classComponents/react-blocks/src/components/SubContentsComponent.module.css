@@ -1,0 +1,12 @@
+.subContents {
+    background-color: #ffd966;
+    height: 75%;
+    width: calc((100% - 20px) / 3 - 7px);
+    display: inline-block;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.subContents:nth-child(3) {
+    margin-right: -2px;
+}

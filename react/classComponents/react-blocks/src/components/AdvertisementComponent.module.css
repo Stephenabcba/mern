@@ -1,0 +1,5 @@
+.advertisement {
+    height: calc(25% - 22px);
+    width: 100%;
+    background-color: #b4a7d6;
+}
