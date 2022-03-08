@@ -425,3 +425,26 @@
     ```
   - can also be used to access a stateful value
     - it will dynamically change to the new object as state changes
+
+## Functional Components
+- Functional vs Class Components
+  - Historically, React class components were more popular due to their access to state
+  - However, introduction of "hooks" had led to the rise of React function components
+  - Now, functional components are more popular, but class components still exists and will be supported
+- Functional Components Syntax
+  - implementation in App.js is the same
+  ``` js
+  // PersonCard.js
+  import React from 'react';
+  const PersonCard = props => {
+      return(
+          <div>
+              <h1>{ props.lastName }, { props.firstName }</h1>
+              <p>Age: { props.age }</p>
+              <p>Hair Color: { props.hairColor }</p>
+          </div>
+      );
+  }
+  export default PersonCard;
+  ```
+- 
