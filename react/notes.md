@@ -163,13 +163,137 @@
   - to modify state, we will need to utilize `this.setState({stateVar: "newStateVal"})`
     - changing state variables using reassignment will not work
   - to toggle state, we can create an if statement to perform different actions depending on state
-``` js
-class MyComponent extends Component {
-    constructor(props) {
-        super(props); // retain all the functionality defined from constructor of Component class
-        this.state = { // initialize state
-            stateVar1: "stateVal1",
-            stateVar2: "stateVal2"
+    ``` js
+    class MyComponent extends Component {
+        constructor(props) {
+            super(props); // retain all the functionality defined from constructor of Component class
+            this.state = { // initialize state
+                stateVar1: "stateVal1",
+                stateVar2: "stateVal2"
+            }
         }
     }
-}
+
+    render() {
+        return (
+            //do something with state
+        )
+    }
+    ```
+- Lifecycle Methods
+  - a component's lifecycle goes from when it is created and mounted to when it is destroyed and unmounted
+  - The lifecycle can be split into 4 stages
+    - Mounting (creating & inserting)
+      - `constructor()`
+        - assign state and bind event handlers
+        - first method called before component is actually mounted
+        - DO NOT make API calls or introduce subscriptions
+      - `render()`
+        - HTML content is processed and rendered
+      - `componentDidMount()`
+        - immediately follows completions of `render()`
+        - initiate network request, subscription, timer, or target a DOM node
+    - Updating
+      - run every time component state or properties are updated
+      - `shouldComponentUpdate(nextProps, nextState)`
+        - tell React whether component should be re-rendered
+        - returns true by default
+          - returning false prevents component from re-rendering
+        - can be changed to optimize performance
+      - `render()`
+        - the component re-renders if `shouldComponentUpdate()` returns true
+      - `componentDidUpdate(prevProps)`
+        - allows us to compare prevProps, prevState, and snapshot value from previous method
+    - Unmounting
+      - `componentWillUnmount()`
+        - invoke right before component is unmounted, ideal place to cancel any on-going network requests, subscriptions, or clear timers
+- Styles
+  - applying CSS has many methods
+    - direct import a `style.css` file
+      - implemented very similarly to regular css classes
+      - upside: simple, supports querySelector
+      - drawback: styles will apply to other components with same css class name
+    ``` css
+    /* styles.css */
+    .btn {
+        padding: 12px 15px; 
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        background: linear-gradient(30deg, rebeccapurple, magenta); 
+        color: #fff; 
+        border: none;
+    }
+    ```
+    ```js
+    // MyButtonComponent.js
+    import React, { Component } from 'react';
+    import './styles.css';
+        
+    class MyButton extends Component {
+        render() {
+            return <button className="btn">{ props.children }</button>;
+        }
+    }
+        
+    export default MyButton;
+    ```
+    - inline styles
+      - create a style object in JS and passing it as style attribute in JSX tags
+      - upside: remedies drawback of direct import
+      - drawback: media queries cannot be used for responsiveness, and pseudo-classes are not supported; all values must be strings
+    ```js
+    // MyButtonComponent.js
+    import React, { Component } from 'react';
+    
+        
+    const btnStyle = {
+        padding: '12px 15px',
+        fontFamily: 'Arial, sans-serif',
+        fontWeight: 'bold',
+        background: 'linear-gradient(30deg, rebeccapurple, magenta)', 
+        color: '#fff',
+        border: 'none'
+    };
+    
+    class MyButton extends Component {
+        render() {
+            return <button style={ btnStyle }>{ props.children }</button>;
+        }
+    }
+        
+    export default MyButton;
+    ```
+    - CSS Modules
+      - create a `MyComponent.module.css` and import it
+        - the file must have `.module.css` extension
+      - upside: 
+        - supports media queries
+        - completely encapsulated at component level
+      - drawback: 
+        - class names cannot be hyphenated
+          - use camelCase instead
+    ```css
+    /* MyButtonComponent.module.css */
+    .btn {
+        padding: 12px 15px; 
+        font-family: Arial, sans-serif; 
+        font-weight: bold;
+        background: linear-gradient(30deg, rebeccapurple, magenta); 
+        color: #fff; 
+        border: none;
+    }
+    ```
+    ```js
+    // MyButtonComponent.js
+    import React, { Component } from 'react';
+    import styles from './MyButtonComponent.module.css';
+    
+        
+    class MyButton extends Component {
+        render() {
+            return <button className={ styles.btn }>{ props.children }</button>;
+        }
+    }
+        
+    export default MyButton;
+    ```
