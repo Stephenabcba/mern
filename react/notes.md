@@ -547,3 +547,66 @@
     // inside of the createUser function
     setUsername("");
     ```
+- Conditional Rendering
+  - The page may render different content based on the state of the page
+    - we can create and manipulate flags in `state` to keep track of what to render
+  - Conditional rendering can be handled through either another function or ternary operators
+    ``` js
+    const [hasBeenSubmitted, setHasBeenSubmitted] = useState(false); // create the state flag
+        
+    const createUser = (e) => {
+        // ...
+        setHasBeenSubmitted( true ); // manipulate the flag as needed
+    };
+
+    const formMessage = () => { // handling conditional formatting with function
+        if( hasBeenSubmitted ) { 
+            return "Thank you for submitting the form!";
+        } else {
+            return "Welcome, please submit the form";
+        }
+    };
+
+    return (
+        // ...
+        <h3>{ formMessage() }</h3> // handling conditional formatting with function
+        // alternatively:
+        {
+            hasBeenSubmitted ? // handling conditional formatting with ternary operators
+            <h3>Thank you for submitting the form!</h3> :
+            <h3>Welcome, please submit the form.</h3> 
+        }
+        // ...
+    )
+    ```
+  - Using conditional rendering, we can perform input validations for forms
+    ``` js
+    const [title, setTitle] = useState("");
+        const [titleError, setTitleError] = useState("");
+        
+        const handleTitle = (e) => {
+            setTitle(e.target.value);
+            if(e.target.value.length < 1) {
+                setTitleError("Title is required!");
+            } else if(e.target.value.length < 3) {
+                setTitleError("Title must be 3 characters or longer!");
+            }
+        }
+        
+        {/* rest of component removed for brevity */}
+        
+        return (
+            <form onSubmit={ (e) => e.preventDefault() }>
+                <div>
+                    <label>Title: </label>
+                    <input type="text" onChange={ handleTitle } />
+                    {
+                        titleError ? // renders empty string if titleError is empty
+                        <p style={{color:'red'}}>{ titleError }</p> :
+                        ''
+                    }
+                </div>
+                <input type="submit" value="Create Movie" />
+            </form>
+        );
+    ```
