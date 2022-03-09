@@ -489,4 +489,61 @@
     }
     ```
 - Forms
-  - 
+  - 2 basic ways to handle forms
+    1.  state: track input values as state, and updating state when the input changes (controlled components)
+    2.  refs: attach refs to DOM nodes for input and textareas and inspect their values once form is submitted (uncontrolled components)
+  - We usually prefer using controlled components
+    - React handles the virtual DOM for us
+    ``` js
+    import React, { useState } from  'react';
+        
+        
+    const UserForm = (props) => {
+        const [username, setUsername] = useState("");
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");  
+        
+        const createUser = (e) => {
+            e.preventDefault();
+            const newUser = { username, email, password };
+            console.log("Welcome", newUser);
+        };
+        
+        return(
+            <form onSubmit={ createUser }>
+                <div>
+                    <label>Username: </label> 
+                    <input type="text" onChange={ (e) => setUsername(e.target.value) } />
+                </div>
+                <div>
+                    <label>Email Address: </label> 
+                    <input type="text" onChange={ (e) => setEmail(e.target.value) } />
+                </div>
+                <div>
+                    <label>Password: </label>
+                    <input type="text" onChange={ (e) => setPassword(e.target.value) } />
+                </div>
+                <input type="submit" value="Create User" />
+            </form>
+        );
+    };
+        
+    export default UserForm;
+    ```
+  - `e.target` refers to the `input` tag, and we can get the value from it
+    - this is due to `onChange` being placed on the input tag
+  - we overwrite the `onSubmit` default functionality with a custom functiong using `e.preventDefault()`, and create our own interaction as needed
+  - New in ES6: if we don't need to rename the object property names, we can add them to the object directly
+    ```js
+    const newUser = { username: username, email: email, password: password };
+    // IN ES6, we can rewrite the above as follows:
+    const newUser = { username, email, password };
+    ```
+  - If we want to clear input after submission, we can set the `value` of the `input` to the respective `state`, and clear the state variable once the form is submitted
+    - it could be useful to not clear the state once input validation is implemented, as user needs to correct errors and resubmit form
+    ```js
+    <input type="text" onchange={ (e) => setUsername(e.target.value) } value={ username } />
+
+    // inside of the createUser function
+    setUsername("");
+    ```
