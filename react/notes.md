@@ -720,6 +720,24 @@
         - the child component can call the props function to manipulate state of the parent function
         - now, the parent function can either display the modified state
           - it can also pass the state into another child component to display
+- Extra Callback Parameters
+  - we cannot pass in parameters using just a function definition as event handlers
+  - passing in parameters directly to the handler function will call the function
+    - the function will execute as soon as the component renders
+    - the handler function will not run properly
+  - to properly pass parameters, use a callback function
+  - Since this is important, the event parameter is passed into the handler function **by default**
+```js
+// function gets immediately run after component is rendered
+return (<input onClick={handleInput(e)}>)
+
+// the handler will work, but we cannot pass in parameters
+return (<input onClick={handleInput}>)
+
+// now we can properly pass in parameters using a callback function
+return (<input onClick={e => handleInput(e)}>)
+
+```
 
 ## Useful React Info
 - React dataflow:
@@ -747,3 +765,6 @@
         <p className="error">{state.firstName.error}</p>
     )}
     ```
+- By default, all synthetic events will pass `event` into the handler function
+  - we can call it `e`
+    - to access the value of an input tag, we can use `e.target.value` in the handler
