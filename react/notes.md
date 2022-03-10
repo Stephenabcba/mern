@@ -161,7 +161,11 @@
   - we will need to modify the constructor to initialize state
   - to access state, we can use `this.state.stateVar`
   - to modify state, we will need to utilize `this.setState({stateVar: "newStateVal"})`
-    - changing state variables using reassignment will not work
+    - changing state variables directly using reassignment will not work
+  - React sometimes "pools" state manipulation statements
+    - attempting to access the state after `setState` may not return the correct state values
+      - accessing the state as a call back function of `setState` ensures that we get the right state
+    - changing the same state twice in one action may result in unexpected/unwanted interactions
   - to toggle state, we can create an if statement to perform different actions depending on state
     ``` js
     class MyComponent extends Component {
@@ -609,4 +613,113 @@
                 <input type="submit" value="Create Movie" />
             </form>
         );
+    ```
+- useReducer
+  - helps reduce repetitive code when working with multiple state
+    - only need to write one handler for each synthetic event
+  - we need to write our own `reducer` function to generate updated state object
+    - updated state object is a copy of current state except the change specified by `action`
+    - useReducer will use the returned updated state object from reducer function to update state
+    - all state variables will be accessible using `state.variableName`
+  - in the case of form inputs:
+    - each input will have `name` corresponding to a state attribute in `initialState`
+    - each input will have `value` reading from the `state.attributeName`, which is the same as the attribute name above
+    - each input will have an `onChange` synthetic event pointing to the same `handleChange` function
+      - inside `handleChange` function, we deconstruct the `name` and `value` from the input tag
+      - once we call `dispatch()`, `useReducer` will update state for us using our `reducer` function
+        - `dispatch()` takes in an object
+          - `type` refers to the state attribute name from `name` (the key in state)
+          - `payload` refers to the new value to assign to the state attribute from `value` (the value in state)
+    - to handle form validation, each attribute in `initialState` should be an object
+      - each object should have `value` and `error` attributes
+      - `name` still refers to the state attribute
+      - `value` now reads from `state.attributeName.value`, as defined 
+      - `handleChange` will still deconstruct `name` and `value` from the input tag
+        - but now it can also validate the `value`
+          - either create a validators object or validator functions
+          - if invalid, we will generate an `error` message
+        - we can repackage the `value` and `error` into an object and save to sate using `dispatch()`
+    ```js
+    import React, { useReducer } from 'react'; // get useReducer() from React
+    
+    const initialState = { // set initial states
+        name: '',
+        email: '',
+        age: { // setting up age attribute for form validation
+          value:'',
+          error: null
+        }
+    };
+    
+    function reducer(state, action) { // creates a new copy of state with change specified by the action object
+        return {
+            ...state,
+            [action.type]: action.payload
+        };
+    }
+    
+    export default () => {
+        const [state, dispatch] = useReducer(reducer, initialState); // utilize useReducer() to manage state
+    
+        function handleChange(e) { // handles all onChange synthetic events
+            const { name, value } = e.target; // deconstruct and extract name and value from the input tag
+            dispatch({ // useReducer will update state for us using reducer()
+                type: name,
+                payload: value
+            });
+        }
+    
+        return (
+            <div>
+                {JSON.stringify(state)}
+                <div>
+                    <label>
+                        <span>Name:</span>{' '}
+                        <input
+                            name="name"
+                            value={state.name}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <span>Email:</span>{' '}
+                        <input
+                            name="email"
+                            value={state.email}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </div>
+            </div>
+        );
+    }
+    ```
+
+## Useful React Info
+- React dataflow:
+  - Base HTML is `/public/index.html`
+  - React components are rendered into the html through `/src/index.js`
+    - `ReactDOM.render` is called here
+  - `index.js` only calls `App.js`
+    - all other components go into `App.js`
+- React component files can have `.js` or `.jsx` filetypes
+  - `.jsx` offers better autocompletion, but fundamentally same as `.js`
+- React cannot directly render objects to HTML
+  - will need to use stringify to convert the object to string
+    ```js
+    JSON.stringify(objectName)
+    ```
+- `Package.json` keeps track of all dependencies
+  - in the directory of `Package.json`, we can run `npm start` to run the react server
+- `Ctrl + c` ends the react server
+- To add Bootstrap, easiest way is to add the CDN links to `index.html`
+  - The long way is to run `npm install Bootstrap` and work from there
+- Shorthand for conditional rendering:
+  - the jsx portion will only render if the first condition evaluates to true/truthy values
+    ```js
+    {state.firstName.error !== null && (
+        <p className="error">{state.firstName.error}</p>
+    )}
     ```
