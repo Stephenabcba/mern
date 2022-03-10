@@ -696,6 +696,30 @@
         );
     }
     ```
+- Iterating with Map
+  - see notes in javascript section for details regarding `.map()` implementation
+  - in JSX, we can generate HTML code for an array of items using `.map()`
+    - the callback function passed in would return some HTML + information
+    - if the collection is an array of objects, the callback function can reach into each object to access any key-value pairs
+  - In this example, each grocery item (along with its index) gets placed in a `<li>` element
+    ```js
+    // inside function component
+    const groceryList = ["pearl onions", "thyme", "cremini mushrooms", "butter"];
+        return ( 
+            <ul>
+                { groceryList.map( (item, i) => 
+                    <li key={ i }>{ item }</li> ) }
+            </ul>
+        ); 
+    ```
+- Lifting State
+  - Props can be functions
+    - we can pass a function as a prop into a component
+      - the child component can then call the function normally and utilize its functionalities
+      - if the function happens to be/call a setter function for `state`:
+        - the child component can call the props function to manipulate state of the parent function
+        - now, the parent function can either display the modified state
+          - it can also pass the state into another child component to display
 
 ## Useful React Info
 - React dataflow:
