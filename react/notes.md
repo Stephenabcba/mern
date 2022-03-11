@@ -430,6 +430,7 @@
   - can also be used to access a stateful value
     - it will dynamically change to the new object as state changes
 
+
 ## Functional Components
 - Functional vs Class Components
   - Historically, React class components were more popular due to their access to state
@@ -731,12 +732,44 @@
 // function gets immediately run after component is rendered
 return (<input onClick={handleInput(e)}>)
 
-// the handler will work, but we cannot pass in parameters
+// the handler will work, but we cannot pass in parameters besides event (e)
 return (<input onClick={handleInput}>)
 
 // now we can properly pass in parameters using a callback function
 return (<input onClick={e => handleInput(e)}>)
 
+```
+
+- Other Input Types
+  - Dropdown (select + option)
+    - we will get our options from an array, and we can render every `<option>` tag using `.map()`
+    - `onChange` handler placed on `<select>` tag
+    - the selected item can be stored in state
+    - every option must have a value
+    - the state variable linked to the dropdown can be initialized to an empty string
+      - we can add an empty string value as an option for the dropdown to display on render
+  - Checkbox
+    - instead of `value`, the data related to checkbox is stored in `checked`
+    - `onChange` placed on the input as usual
+```js
+//...
+const [selectedFruit, setSelectedFruit] = useState("");
+const [isTasty, setIsTasty] = useState(false);
+//...
+return (
+        <form onSubmit={handleSubmit}>
+            <select value={selectedFruit} onChange={e => setSelectedFruit(e.target.value)}>
+                <option value="">Please select a value</option>
+                {fruits.map( (fruit, idx) => 
+                    <option key={idx} value={fruit}>{fruit}</option>
+                )}
+            </select>
+            <label>
+                <input type="checkbox" checked={isTasty} onChange={e => setIsTasty(e.target.checked)}/> Is it tasty?
+            </label>
+            <button>Take a bite!</button>
+        </form>
+    );
 ```
 
 ## Useful React Info
@@ -768,3 +801,54 @@ return (<input onClick={e => handleInput(e)}>)
 - By default, all synthetic events will pass `event` into the handler function
   - we can call it `e`
     - to access the value of an input tag, we can use `e.target.value` in the handler
+- To save persistent data on page reloads, we can make use of `useEffect()` and `window.localStorage`
+  - data in `localStorage` is stored in key-value pairs
+    - we can stringify our object to flatten it
+      - we will have to parse the object back into JSON format to use it again
+  - the saved data is unencrypted, so do not store sensitive information
+  - by default, `useEffect()` runs on initial component render + all subsequent renders
+    - optionally, it takes a second parameter, and `useEffect()` will only run when the second parameter changes after loading once initially
+      - we can make use of this by passing a static object to only grab data from localStorage on page load
+    ```js
+    import React, { useState, useEffect } from 'react'
+    //... initialize state object
+    // on page load, grab the data from localStorage using key "todo"
+    useEffect(() => {
+      setTodoList(JSON.parse(window.localStorage.getItem('todo')) || [])
+    }, [])
+
+    // on change at any time, store the state object into localStorage
+    useEffect(() => {
+      todoList && window.localStorage.setItem("todo", JSON.stringify(todoList))
+    })
+    ```
+- To manipulate state object that is an array, we can use `.map()` or `.filter()` + the `target` index or value that we wish to manipulate
+  - create a copy of the state array
+  - callback function of `.map()` can selectively modify only the desired index
+    - if current index matches desired index, modify the item as desired
+    - if current index does not match desired index, just put original/copy of original value
+  - `.filter()` is useful for creating a copy of the state array with undesired elements removed
+    - if given an index, we can filter out and remove the value at desired index
+    - the callback function can also filter out values containing x, equal to x, etc
+  - at the end, call `setState()` equivalent function to save the modified array
+
+``` js
+// use map to only change value at desired index
+function toggleCompleted(todoIdx) {
+  const updatedTodo = todoList.map((todo, idx) => {
+    return (idx === todoIdx) ?
+      {
+        ...todo,
+        completed: !todo.completed
+      }
+      : { ...todo }
+  })
+  setTodoList(updatedTodo)
+}
+
+// use filter to remove 
+function deleteTodo(deleteIdx) {
+  const updatedTodo = todoList.filter((todo, idx) => deleteIdx !== idx)
+  setTodoList(updatedTodo)
+}
+```
