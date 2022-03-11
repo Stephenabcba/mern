@@ -1,0 +1,29 @@
+.active {
+    background-color: black;
+    color: white;
+}
+
+.nonActive {
+    background-color: white;
+    color: black;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border: 1px solid lightgray;
+}
+
+.tabContentText {
+    position: relative;
+    padding: 10px;
+    border: 1px solid gray;
+    width: 300px;
+    height: 200px;
+}
+
+.flex {
+    display: flex;
+    justify-content: center;
+}
+
