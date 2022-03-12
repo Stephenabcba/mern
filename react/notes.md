@@ -655,7 +655,7 @@
     function reducer(state, action) { // creates a new copy of state with change specified by the action object
         return {
             ...state,
-            [action.type]: action.payload
+            [action.type]: action.payload // the square bracket is the "computed property name" notation for ES6
         };
     }
     
@@ -751,25 +751,92 @@ return (<input onClick={e => handleInput(e)}>)
   - Checkbox
     - instead of `value`, the data related to checkbox is stored in `checked`
     - `onChange` placed on the input as usual
-```js
-//...
-const [selectedFruit, setSelectedFruit] = useState("");
-const [isTasty, setIsTasty] = useState(false);
-//...
-return (
-        <form onSubmit={handleSubmit}>
-            <select value={selectedFruit} onChange={e => setSelectedFruit(e.target.value)}>
-                <option value="">Please select a value</option>
-                {fruits.map( (fruit, idx) => 
-                    <option key={idx} value={fruit}>{fruit}</option>
-                )}
-            </select>
-            <label>
-                <input type="checkbox" checked={isTasty} onChange={e => setIsTasty(e.target.checked)}/> Is it tasty?
-            </label>
-            <button>Take a bite!</button>
-        </form>
+    ```js
+    //...
+    const [selectedFruit, setSelectedFruit] = useState("");
+    const [isTasty, setIsTasty] = useState(false);
+    //...
+    return (
+            <form onSubmit={handleSubmit}>
+                <select value={selectedFruit} onChange={e => setSelectedFruit(e.target.value)}>
+                    <option value="">Please select a value</option>
+                    {fruits.map( (fruit, idx) => 
+                        <option key={idx} value={fruit}>{fruit}</option>
+                    )}
+                </select>
+                <label>
+                    <input type="checkbox" checked={isTasty} onChange={e => setIsTasty(e.target.checked)}/> Is it tasty?
+                </label>
+                <button>Take a bite!</button>
+            </form>
+        );
+    ```
+
+- Context API
+  - Built in with React
+  - Behaves like "Global State"
+  - Useful for if many levels of components require this information
+    - ex: themes, preferences, etc
+  - Context can hold primitive values or an object, as needed
+  - Downsides:
+    - it is more difficult to reuse components as now they have dependencies on the context
+  - Create a context object
+  ``` js
+  import { createContext } from 'react';
+  //...
+  const MyContext = createContext();
+  ```
+  - All children component of `MyContext` will have access to the given context
+    - the tag name is `Context.Provider`
+  ``` js
+  import React from 'react';
+  import logo from './logo.svg';
+  import './App.css';
+  import AppWrapperComponent from './AppWrapperComponent';
+  import MyContext from './context/MyContext';
+  function App() {
+    return (
+      <div className="App">
+        <MyContext.Provider value={"context value"}>
+          <AppWrapperComponent>
+          </AppWrapperComponent>
+          {/*All other children component here*/}
+        </MyContext.Provider>
+      </div>
     );
+  }
+  export default App;
+  ```
+  - Values in the context can be accessed through `useContext()`
+  ```js
+  import React, { useContext } from 'react';
+  import MyContext from './context/MyContext';
+  const GreatGreatGreatGrandchildComponent = (props) =>{
+      const context = useContext(MyContext);
+      return(
+        <div>
+          hello {context}
+        </div>
+      )
+  }
+  export default GreatGreatGreatGrandchildComponent;
+  ```
+
+- Context with State
+  - the getter and setter of `state` could be passed into context for all descendents to use
+  - we just need to pass in the `state` and `setState` equivalent to the `.Provider` tag
+    - 
+``` js
+const [val, setVal] = useState(1);
+
+return (
+  <div className="App">
+    <NumContext.Provider value={{val, setVal}}>
+      <AppWrapperComponent>
+      </AppWrapperComponent>
+    </NumContext.Provider>
+  </div>
+);
 ```
 
 ## Useful React Info
@@ -852,3 +919,16 @@ function deleteTodo(deleteIdx) {
   setTodoList(updatedTodo)
 }
 ```
+- To easily manipulate the `className` of an element, we can create an array
+  - each item in the array is a css class to add to the element
+  - at the end, assign `arr.join(" ")` to the element's `className`
+- In simple cases, `useReducer()` can use implemented with `useState()`
+  - instead of `dispatch()`, we use `setState()` or equivalent
+  - we transfer the logic from `reduce()` into the parameter of `setState()`
+- We can destructure `props` directly in the input of the functional component
+  - this is called `in-place destructure`
+  ```js
+  function MyFnComp ({usename}) { // in this case, props take in username
+    return <div></div>
+  }
+  ```
