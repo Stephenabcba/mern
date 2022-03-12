@@ -1,0 +1,10 @@
+.formInput {
+    padding: 15px 10px;
+    border: 1px solid lightgray;
+    border-radius: 3px;
+    margin: 20px;
+}
+
+.inputLabel {
+    margin-left: 20px;
+}
