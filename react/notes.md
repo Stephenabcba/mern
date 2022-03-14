@@ -983,6 +983,64 @@ export default () => {
         .then( res => console.log(res) )
         .catch( err => console.log(err) );
     ```
+- Intro to Rest APIs
+  - API = Application Programming Interface
+  - Rest API / Restful API
+    - API that communicates among and between web services
+    - follow certain set of rules to make implementation easy
+- Consuming APIs
+  - `fetch` allows us to call an API
+    ```js
+    fetch("http://www.example.com")
+        .then(response =>{
+            //do something
+        }).catch(err => {
+            console.log(err);
+        })
+
+    // in ES7, we can:
+    let response = await fetch("http://www.example.com");
+    ```
+- useEffect
+  - a hook used to manage "side Effects" in React projects
+  - a `useEffect` method will execute when component is rendered and every time it is updated
+  - Second Argument
+    - `useEffect` can also be configured to execute on render + if a given variable has changed
+    - the argument is an array of all variables to track
+      - if the array is empty, meaning track no variables, `useEffect` will only execute on render
+  - we can then use `useEffect` to ensure that the API call only happens after the component is rendered
+  - cleanup on unmounting
+    - sometimes, there are functionalities that we wish to run when the component is unmounted
+      - clear intervals, end socket connections, etc.
+    - simply return a function inside the callback function in `useEffect`
+    - the name of the function returned should not matter
+      - it can even be an anonymous or arrow function
+    ```js
+    const [people, setPeople] = useState([]);
+    
+    useEffect(() => {
+        fetch('https://swapi.dev/api/people/')
+            .then(response => response.json())
+            .then(response => setPeople(response.results))
+    }, []);
+
+    // runs on render + when we change the variable isSubmitted
+    useEffect(()=>{
+        alert("When will this run?");
+    }, [state.isSubmitted]);
+
+    // cleanup
+    useEffect(() => {
+        fetch('https://swapi.dev/api/people/')
+            .then(response => response.json())
+            .then(response => setPeople(response.results))
+
+        return function cleanup() {
+          // cleanup functionalities here
+        }
+    }, []);
+    ```
+
 
 ## Useful React Info
 - React dataflow:
