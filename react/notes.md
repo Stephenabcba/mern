@@ -1040,6 +1040,23 @@ export default () => {
         }
     }, []);
     ```
+- Axios
+  - a npm package that makes specifying the type of requests easier
+  - will need to be installed separately
+    ```
+    npm install axios
+    ```
+  - syntax very similar to `fetch()`, but now we use `axios.get()`
+    - we usually still put the requests in `useEffect`
+    - instead of using `response.json()`, we use `response.data` to access the response data
+    ```js
+    import axios from 'axios';
+    //...
+    axios.get('http://www.example.com').then(response=>{
+        console.log(response);
+    })
+    ```
+
 
 
 ## Useful React Info
