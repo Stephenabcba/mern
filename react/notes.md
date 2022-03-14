@@ -839,6 +839,151 @@ return (
 );
 ```
 
+- Render Props
+  - In the past, developers made "smart" or "presentational" components
+    - smart components had state and handled logic
+    - presentational components did not hold state and existed for cosmetic purposes
+  - New pattern is `Render Props`, which helps create flexible and reusable components
+  - The logic layer keeps track of state
+    - also contains all required calculation/state-modifying functions
+    - does not contain any HTML
+    - input (from props): optional initial values, `render()` callback function
+      - `render()`
+    - highly reuseable
+  - The display layer does not access state at all
+    - creates the `render()` function to pass into the logic layer
+      - the function will provide all the html/jsx needed to render the component
+        - `<></>` React fragment is useful for avoiding unnecessary `<div>` tags
+  - It is possible to implement render props without `render()`, such as utilizing `children`
+    - what's important is the separation of logic and display
+    ``` js
+    // Counter.js, logic layer, highly reuseable
+    import React, { useState } from 'react';
+    
+    export default ({ initialValue = 0, render }) => {
+        const [count, setCount] = useState(initialValue);
+    
+        function increment() {
+            setCount(count + 1);
+        }
+    
+        function decrement() {
+            setCount(count - 1);
+        }
+    
+        return render({ count, increment, decrement });
+    }
+    ```
+
+    ``` js
+    // CounterDisplay.js, display layer
+    import React from 'react';
+    
+    import Counter from './Counter';
+    
+    export default () => (
+        <Counter
+            initialValue={10}
+            render={({ count, increment, decrement }) => (
+                <>
+                    <button onClick={increment}>Increment</button>
+                    <button onClick={decrement}>Decrement</button>
+                    <p>Current Count: {count}</p>
+                </>
+            )}
+        />
+    )
+    ```
+- Custom Hooks
+  - reminder: `useState()` is a hook
+  - we can write our own hooks that builds on top of `useState()`
+    - custom methods and logic that can be **reused**
+    - any component that wishes to make use of the custom hook can import the hook
+      - the hook is a function that we can call -> initializes the hook
+      - all methods in the hook can be deconstructed to use as needed
+      - state is now managed by the custom hook
+    - if we build the hook on top of `useState()`, the hook variable will behave like state
+```js
+// useList.js, our custom hook
+import { useState } from 'react';
+ 
+export default (initialList = []) => {
+    const [list, setList] = useState(initialList);
+ 
+    function add(str) {
+        setList([...list, str]);
+    }
+ 
+    function remove(index) {
+        setList([
+            ...list.slice(0, index),
+            ...list.slice(index + 1)
+        ]);
+    }
+ 
+    return { // each variable/function can be deconstructed as neeeded
+        list,
+        add,
+        remove
+    };
+}
+```
+``` js
+import React, { useState } from 'react';
+ 
+import useList from './useList';
+ 
+export default () => {
+    const [val, setVal] = useState('');
+    const { list, add } = useList(['first', 'second']); // calling our hook, we can choose to also deconstruct remove() if needed
+ 
+    function handleSubmit() {
+        add(val); // using the deconstructed hook function
+        setVal('');
+    }
+ 
+    return (
+        <>
+            {list.map((item, i) => <p key={i}>{item}</p>}
+            <input
+                onChange={e => setVal(e.target.value)}
+                value={val}
+            />
+            <button onClick={handleSubmit}>Add</button>
+        </>
+    );
+}    
+```
+
+## APIs
+- Promises
+  - by default, JS is synchronous
+    - code runs line by line, top to bottom
+  - If we are accessing data from backend server or external server, we do not want to pause everything to wait for a response
+    - API calls take indefinite amount of time
+  - To resolve this problem, we use promises
+  - Promises have 3 states:
+    - Pending: outcome not determined
+    - Resolved: outcome completed successsfully
+    - Rejected: outcome compelted with errors
+  - Advantages:
+    - better control of asynchronous code flow
+    - easy to read
+    - avoiding "callback hell"
+    ``` js
+    //example
+    const noMondays = new Promise( (resolve, reject) => {
+        if(new Date().getDay() !== 1) {
+            resolve("Good, it's not Monday!");
+        } else {
+            reject("Someone has a case of the Mondays!");
+        }
+    });
+    noMondays
+        .then( res => console.log(res) )
+        .catch( err => console.log(err) );
+    ```
+
 ## Useful React Info
 - React dataflow:
   - Base HTML is `/public/index.html`
