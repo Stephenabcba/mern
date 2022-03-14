@@ -1057,6 +1057,122 @@ export default () => {
     })
     ```
 
+## React Routing
+- What is routing
+  - the part that comes after the domain name
+  - format:
+    - `http://subdomain.domain.topLevelDomain/path`
+    - the last part is the path
+  - ex:
+    - `https://login.codingdojo.com/m/130/6236/50226`
+    - here, `m/130/6236/50226` is the path
+  - in single page applications, routes are used to manipulate the DOM
+    - request might not be sent to the server
+- React Router
+  - another package that handles front-end routing
+    - React does not have routing built in with `create-react-app`
+    - the `@5` means 5th version, as of 3/14/2022 the newest version is version 6
+    ```
+    npm install react-router-dom@5
+    ```
+  - Components from `react-router-dom`
+    - `BrowserRouter`: anything that we want to change based on routes need to be wrapped in this tag
+    - `Link`: behaves like an anchor `<a>` tag for React
+      - the `to` property points to the route we want
+        - clicking on the link changes the route in browser
+      - the inside text is what's displayed
+      - does not cause page refresh, which is what we want in a SPA
+    - `Switch`: the component that will change out based on the current route
+      - `Route` components will be placed inside, whichever route has matching path will be rendered
+    - `Route`: different path cases place inside `Switch`
+      - `path` prop: the path to match to the current url
+        - if our current url is `http://localhost:3000/about`, our `/about` route will show
+      - holds the html/jsx components that should be rendered when the `path` matches current url
+      - At some point, the order of pathing mattered
+        - React router was choosing the first `path` that met the condition
+          - if `/` was placed first, all urls (`/about`, `/main`, `/apples`) will go to `/` route
+            - this could be mitigated with placing `exact` keyword in the `Route` component
+        - The issue was resolved in version 6, where React router will choose the best match
+        - This issue is still present in version 5, which we are still using
+- useParams
+  - a hook provided by React router to read variables from path
+    - the function is imported from **react-router**, not react!
+  - the function will return an object(dictionary) holding the params
+    - we can use `destructuring` to get the variables directly
+  - even without `useParams`, we can match multiple paths in React router
+    - `path="/location/:city"` will match all paths that start with /location/
+    - if we do use `useParams`, `:city` becomes a variable that can be destructured
+``` js
+import React from "react";
+import {
+  BrowserRouter,
+  Link,
+  Switch,
+  Route
+} from "react-router-dom";
+import { useParams } from "react-router";
+    
+const Location = (props) => {
+  const { city } = useParams(); // city is destructured
+    
+  return (
+    <h1>Welcome to { city }!</h1>
+  );
+}
+    
+function App() {
+  return (
+    <BrowserRouter>
+      <p>
+        <Link to="/location/seattle">Seattle</Link>
+        &nbsp;|&nbsp;
+        <Link to="/location/chicago">Chicago</Link>
+        &nbsp;|&nbsp;
+        <Link to="/location/burbank">Burbank</Link>
+      </p>
+      <Switch>
+        <Route path="/location/:city">
+          <Location />
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  );
+}
+export default App;
+```
+
+```js
+import React from "react";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Link 
+} from "react-router-dom";
+    
+function App() {
+  return (
+    <BrowserRouter>
+      <h1>Routing Example</h1>
+      <p>
+        <Link to="/">Home</Link>
+         | 
+        <Link to="/about">About</Link>   
+      </p>
+      <Switch>
+        <Route path="/about">
+          <About /> {/* our own custom component*/}
+        </Route>
+        <Route exact path="/">
+          <Home /> {/* our own custom component*/}
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  );
+}
+    
+export default App;
+```
 
 
 ## Useful React Info
