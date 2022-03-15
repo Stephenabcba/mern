@@ -1,0 +1,20 @@
+.App {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+input, select {
+  padding: 10px 15px;
+  margin: 0px 20px;
+  border: 1px solid #C4B7CB;
+  border-radius: 5px;
+}
+
+button {
+  padding: 5px 10px;
+  color: #545C52;
+  background-color: #98E2C6;
+  border: 1px solid #BFEDEF;
+  border-radius: 5px;
+  cursor: pointer;
+}
