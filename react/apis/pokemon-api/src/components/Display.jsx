@@ -7,6 +7,7 @@ const Display = (props) => {
             .then(r => r.json())
             .then(result => result.results.map((pokemon) => pokemon.name))
             .then(pokemonNames => setPokemons(pokemonNames))
+            .catch(err => console.log(err))
     }, [])
     return (
         <div>

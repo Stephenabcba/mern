@@ -15,6 +15,7 @@ const PersonDisplay = (props) => {
             fetch(props.searchResult.homeworld)
                 .then(r => r.json())
                 .then(result => setHomeWorld(result))
+                .catch(err => console.log(err))
         }
     }, [props.searchResult.homeworld])
 

@@ -23,6 +23,7 @@ const SearchResult = (props) => {
                 props.setSearchResult(result)
             })
             .then(() => setRendered(true))
+            .catch(err => console.log(err))
     }, [props.search])
     return (
         <>

@@ -28,6 +28,7 @@ function App() {
     fetch("https://swapi.dev/api/")
       .then(r => r.json())
       .then(result => setCategories(result))
+      .catch(err => console.log(err))
   }, [])
 
   // useEffect(() => {
