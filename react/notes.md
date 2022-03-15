@@ -777,7 +777,7 @@ return (<input onClick={e => handleInput(e)}>)
   - Behaves like "Global State"
   - Useful for if many levels of components require this information
     - ex: themes, preferences, etc
-  - Context can hold primitive values or an object, as needed
+  - Context can hold `primitive value` or an `object`, as needed
   - Downsides:
     - it is more difficult to reuse components as now they have dependencies on the context
   - Create a context object
@@ -825,19 +825,20 @@ return (<input onClick={e => handleInput(e)}>)
 - Context with State
   - the getter and setter of `state` could be passed into context for all descendents to use
   - we just need to pass in the `state` and `setState` equivalent to the `.Provider` tag
-    - 
-``` js
-const [val, setVal] = useState(1);
+    - now, any child component has access to the state through `useContext()`
+  - in this example, state (we called it val) is saved in `NumContext`
+  ``` js
+  const [val, setVal] = useState(1);
 
-return (
-  <div className="App">
-    <NumContext.Provider value={{val, setVal}}>
-      <AppWrapperComponent>
-      </AppWrapperComponent>
-    </NumContext.Provider>
-  </div>
-);
-```
+  return (
+    <div className="App">
+      <NumContext.Provider value={{val, setVal}}>
+        <AppWrapperComponent>
+        </AppWrapperComponent>
+      </NumContext.Provider>
+    </div>
+  );
+  ```
 
 - Render Props
   - In the past, developers made "smart" or "presentational" components
@@ -903,57 +904,58 @@ return (
       - all methods in the hook can be deconstructed to use as needed
       - state is now managed by the custom hook
     - if we build the hook on top of `useState()`, the hook variable will behave like state
-```js
-// useList.js, our custom hook
-import { useState } from 'react';
- 
-export default (initialList = []) => {
-    const [list, setList] = useState(initialList);
- 
-    function add(str) {
-        setList([...list, str]);
+    ```js
+    // useList.js, our custom hook
+    import { useState } from 'react';
+    
+    export default (initialList = []) => {
+        const [list, setList] = useState(initialList);
+    
+        function add(str) {
+            setList([...list, str]);
+        }
+    
+        function remove(index) {
+            setList([
+                ...list.slice(0, index),
+                ...list.slice(index + 1)
+            ]);
+        }
+    
+        return { // each variable/function can be deconstructed as neeeded
+            list,
+            add,
+            remove
+        };
     }
- 
-    function remove(index) {
-        setList([
-            ...list.slice(0, index),
-            ...list.slice(index + 1)
-        ]);
-    }
- 
-    return { // each variable/function can be deconstructed as neeeded
-        list,
-        add,
-        remove
-    };
-}
-```
-``` js
-import React, { useState } from 'react';
- 
-import useList from './useList';
- 
-export default () => {
-    const [val, setVal] = useState('');
-    const { list, add } = useList(['first', 'second']); // calling our hook, we can choose to also deconstruct remove() if needed
- 
-    function handleSubmit() {
-        add(val); // using the deconstructed hook function
-        setVal('');
-    }
- 
-    return (
-        <>
-            {list.map((item, i) => <p key={i}>{item}</p>}
-            <input
-                onChange={e => setVal(e.target.value)}
-                value={val}
-            />
-            <button onClick={handleSubmit}>Add</button>
-        </>
-    );
-}    
-```
+    ```
+    ``` js
+    // utilizing our custom hook useList to manage state
+    import React, { useState } from 'react';
+    
+    import useList from './useList';
+    
+    export default () => {
+        const [val, setVal] = useState('');
+        const { list, add } = useList(['first', 'second']); // calling our hook, we can choose to also deconstruct remove() if needed
+    
+        function handleSubmit() {
+            add(val); // using the deconstructed hook function
+            setVal('');
+        }
+    
+        return (
+            <>
+                {list.map((item, i) => <p key={i}>{item}</p>}
+                <input
+                    onChange={e => setVal(e.target.value)}
+                    value={val}
+                />
+                <button onClick={handleSubmit}>Add</button>
+            </>
+        );
+    }    
+    ```
 
 ## APIs
 - Promises
@@ -1094,6 +1096,38 @@ export default () => {
             - this could be mitigated with placing `exact` keyword in the `Route` component
         - The issue was resolved in version 6, where React router will choose the best match
         - This issue is still present in version 5, which we are still using
+    ```js
+    import React from "react";
+    import {
+      BrowserRouter,
+      Switch,
+      Route,
+      Link 
+    } from "react-router-dom";
+        
+    function App() {
+      return (
+        <BrowserRouter>
+          <h1>Routing Example</h1>
+          <p>
+            <Link to="/">Home</Link>
+            | 
+            <Link to="/about">About</Link>   
+          </p>
+          <Switch>
+            <Route path="/about">
+              <About /> {/* our own custom component*/}
+            </Route>
+            <Route exact path="/">
+              <Home /> {/* our own custom component*/}
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      );
+    }
+        
+    export default App;
+    ```
 - useParams
   - a hook provided by React router to read variables from path
     - the function is imported from **react-router**, not react!
@@ -1102,78 +1136,58 @@ export default () => {
   - even without `useParams`, we can match multiple paths in React router
     - `path="/location/:city"` will match all paths that start with /location/
     - if we do use `useParams`, `:city` becomes a variable that can be destructured
-``` js
-import React from "react";
-import {
-  BrowserRouter,
-  Link,
-  Switch,
-  Route
-} from "react-router-dom";
-import { useParams } from "react-router";
-    
-const Location = (props) => {
-  const { city } = useParams(); // city is destructured
-    
-  return (
-    <h1>Welcome to { city }!</h1>
-  );
-}
-    
-function App() {
-  return (
-    <BrowserRouter>
-      <p>
-        <Link to="/location/seattle">Seattle</Link>
-        &nbsp;|&nbsp;
-        <Link to="/location/chicago">Chicago</Link>
-        &nbsp;|&nbsp;
-        <Link to="/location/burbank">Burbank</Link>
-      </p>
-      <Switch>
-        <Route path="/location/:city">
-          <Location />
-        </Route>
-      </Switch>
-    </BrowserRouter>
-  );
-}
-export default App;
-```
+    ``` js
+    import React from "react";
+    import {
+      BrowserRouter,
+      Link,
+      Switch,
+      Route
+    } from "react-router-dom";
+    import { useParams } from "react-router";
+        
+    const Location = (props) => {
+      const { city } = useParams(); // city is destructured
+        
+      return (
+        <h1>Welcome to { city }!</h1>
+      );
+    }
+        
+    function App() {
+      return (
+        <BrowserRouter>
+          <p>
+            <Link to="/location/seattle">Seattle</Link>
+            &nbsp;|&nbsp;
+            <Link to="/location/chicago">Chicago</Link>
+            &nbsp;|&nbsp;
+            <Link to="/location/burbank">Burbank</Link>
+          </p>
+          <Switch>
+            <Route path="/location/:city">
+              <Location />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      );
+    }
+    export default App;
+    ```
 
-```js
-import React from "react";
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Link 
-} from "react-router-dom";
-    
-function App() {
-  return (
-    <BrowserRouter>
-      <h1>Routing Example</h1>
-      <p>
-        <Link to="/">Home</Link>
-         | 
-        <Link to="/about">About</Link>   
-      </p>
-      <Switch>
-        <Route path="/about">
-          <About /> {/* our own custom component*/}
-        </Route>
-        <Route exact path="/">
-          <Home /> {/* our own custom component*/}
-        </Route>
-      </Switch>
-    </BrowserRouter>
-  );
-}
-    
-export default App;
-```
-
+- useHistory
+  - another hook from react router
+  - `history.push(path)`: useful for when we want to change the route without the user clicking on a link
+    - when it is run, the url is changed to the `path` given
+    - example: "redirecting" when we submit a form
+  - We can also 
+    - `history.goBack()` will bring the url to the previous route
+    - `history.goForward()` will being the url forward
+    ``` js
+    import { useHistory } from "react-router-dom";
+    const history = useHistory();
+    history.push("/results");
+    ```
 
 ## Useful React Info
 - React dataflow:
