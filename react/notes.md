@@ -972,6 +972,7 @@ return (<input onClick={e => handleInput(e)}>)
     - better control of asynchronous code flow
     - easy to read
     - avoiding "callback hell"
+  - When dealing with `Promises`, **ALWAYS HAVE A CATCH CLAUSE**
     ``` js
     //example
     const noMondays = new Promise( (resolve, reject) => {
