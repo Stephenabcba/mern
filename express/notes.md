@@ -149,7 +149,64 @@
         res.json( { status: "ok" } );
     });
     ```
+- Folder Structure
+  - suggested folder structure to keep projects organized
+  - folders:
+    - `controllers`: hold all logic for each model (creating, updating, etc)
+    - `models`: hold all schemas
+    - `routes`: handle routes for each model
+    - `server.js` handle all server logic with express
+    ```
+    server/
+        >config/
+        >controllers/
+        >models/
+        >routes/
+        server.js 
+    ```
+  - in order to separate and compartmentalize our files, we need to implement `modules`
+- Modules
+  - in front end, we can simply access another javascript file through `<script>` with `src` attribute
+  - in back end, we have to utilize `module` to work across js files
+  - module works in a 2-step process
+    - export
+      - in the file we want to export from, populate the `module.exports` object with variables and functions
+    ``` js
+    // method 1: adding each attribute to the object
+    module.exports.greet = function() {
+    console.log("Hello! We are exporting a function called Greet.");
+    };
+    
+    module.exports.add = function(num1, num2) {
+    console.log("The sum is: ", num1 + num2);
+    };
 
+    // method 2: creating the object with key-value pairs
+    module.exports = {
+    greet: function() {
+        console.log("Hello! We are exporting a function called Greet.");
+    },
+    add: function(num1, num2) {
+        console.log("The sum is: ", num1 + num2);
+    }
+    }
+    ```
+    - import
+      - in the file we want to use the functionalities, import the modules with `require()`
+        - the argument is the path to file with `module.exports`, without the `.js` suffix
+        - if `./` is not included, by default `require()` searches in `node_modules/` folder
+    ``` js
+    // importing from my_module.js in the same directory, where module.exports exist
+    // save the exports object as a variable
+    const myCustomModule = require("./my_module");
+    myCustomModule.greet();
+    myCustomModule.add(5, 7);
+
+    // destructure the exports object to use directly
+    const { greet, add } require("./my_module");
+    greet();
+    add(5, 7);
+    ```
 
 ## Useful commands
 - create `package.json`
