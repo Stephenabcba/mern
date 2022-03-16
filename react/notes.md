@@ -1283,3 +1283,10 @@ function deleteTodo(deleteIdx) {
     return <div></div>
   }
   ```
+- there are two valid places to add `<BrowserRouter>`
+  - both will work, just depends on standards / preference
+  - method 1: add in `App.js`, wrapping all content inside
+  - method 2: add in `index.js`, wrapping `<App/>`
+- to redirect, we can use `<Redirect to="/path">`
+  - /path is the link to redirect to
+  - usually placed under `<Route>` to redirect to other links
