@@ -5,10 +5,8 @@ import {
   BrowserRouter,
   Switch,
   Route,
-  Link,
   // useHistory
 } from "react-router-dom";
-import { useHistory } from "react-router-dom";
 import Search from './components/Search';
 import PersonDisplay from './components/PersonDisplay';
 import PlanetDisplay from './components/PlanetDisplay';

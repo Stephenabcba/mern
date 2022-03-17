@@ -11,9 +11,11 @@ const SearchResult = (props) => {
     const [rendered, setRendered] = useState(false);
 
     // console.log(query, id)
+    // set search parameter
     useEffect(() => {
         props.setSearch(props.categories[query] + id);
     })
+    // run the query
     useEffect(() => {
         // console.log("fetching from results")
         setRendered(false)

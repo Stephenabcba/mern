@@ -17,7 +17,7 @@ const PersonDisplay = (props) => {
                 .then(result => setHomeWorld(result))
                 .catch(err => console.log(err))
         }
-    }, [props.searchResult.homeworld])
+    }, [])
 
     // useEffect(() => {
     //     console.log("fetching")
