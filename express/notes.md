@@ -208,8 +208,18 @@
     add(5, 7);
     ```
 
-## Useful commands
+## Useful Info
 - create `package.json`
+  - by default, the entry point is `index.js`
+  - we can change this in `package.json`
+    - alternatively, we can make `server.js` first
+      - running `init` after will automatically change entry point to `server.js`
+  - `-y` uses all defaults, which we are not currently changing
     ```
+    touch server.js
+
     npm init -y
     ```
+- in postman, since we are working with `JSON`, we can send raw JSON data in post request
+  - Post request
+  - body: raw -> JSON (in dropdown)
