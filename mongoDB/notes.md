@@ -341,3 +341,151 @@
         
     app.listen(8000, () => console.log("The server is all fired up on port 8000"));
     ```
+- Validations
+  - validations can be specified when creating the schema in model files
+  - details in <a href="http://mongoosejs.com/docs/validation.html">documentation</a>
+    ``` js
+    const UserSchema = new mongoose.Schema(
+      {
+        first_name: {
+          type: String,
+          required: [true, "First name is required"],
+          minlength: [6, "First name must be at least 6 characters long"]
+        },
+        last_name: {
+          type: String,
+          required: [true, "Last name is required"],
+          maxlength: [20, "Last name must be at least 6 characters long"]
+        },
+        age: {
+          type: Number,
+          min: [1, "You must be at least 1 or older to register"],
+          max: [150, "You must be at most 149 years old to register"]
+        },
+        email: { type: String, required: [true, "Email is required"] }
+      },
+      { timestamps: true }
+    );
+    ```
+
+## Commonly used mongoose code
+- more in <a href="http://mongoosejs.com/docs/index.html">documentations</a>
+```js
+// models
+// Create a Schema for Users
+const UserSchema = new mongoose.Schema({
+ name: { type: String },
+ age: { type: Number }
+}, { timestamps: true })
+// create a constructor function for our model and store in variable 'User'
+const User = mongoose.model('User', UserSchema);
+```
+
+```js
+// controllers
+
+// ***CREATE***
+// ...create a new document to store in the User collection and save it to the DB.
+const bob = new User(req.body);
+// req.body is an object containing all the users data.
+// if we look at req.body as an object literal it would look like this
+	/*
+     * req.body = {
+     *		"name": "Bob Ross",
+     *		"age": 42
+     *	}
+    **/
+bob.save()
+    .then(newUser => {
+        // logic with succesfully saved newUser object
+    })
+    .catch(err => res.json(err));
+ // If there's an error and the record was not saved, this (err) will contain validation errors.
+
+// can create the entry without making an instance of the model class
+// ...create a new document to store in the User collection and save it to the DB.
+const { userData } = req.body;
+User.create(userData)
+    .then(newUser => {
+        // logic with succesfully saved newUser object
+    })
+    .catch(err => res.json(err));
+ // If there's an error and the record was not saved, this (err) will contain validation errors.
+
+// validation for uniqueness before creating
+User.exists({name: req.body.name})
+    .then(userExists => {
+        if (userExists) {
+            // Promise.reject() will activate the .catch() below.
+            return Promise.reject('Error Message Goes Here');
+        }
+        return User.create(req.body);
+    })
+    .then(saveResult => res.json(saveResult))
+    .catch(err => res.json(err));
+
+// ***READ***
+// ALL
+// ...retrieve an array of all documents in the User collection
+User.find()
+    .then(users => {
+        // logic with users results
+    })
+    .catch(err => res.json(err));
+
+// ONE BY NAME
+// ...retrieve an array of documents matching the query object criteria
+User.find({name:'Jessica'}) 
+    .then(usersNamedJessica => {
+        // logic with usersNamedJessica results
+    })
+    .catch(err => res.json(err));
+
+// ONE BY ID
+// ...retrieve 1 document (the first record found) matching the query object criteria
+User.findOne({_id: '5d34d361db64c9267ed91f73'})
+    .then(user => {
+        // logic with single user object result
+    })
+    .catch(err => res.json(err));
+
+// ***UPDATE***
+// UPDATE ONE
+// ...update 1 document that matches the query object criteria
+User.updateOne({name:'Bob Ross'}, {
+    name: 'Ross Bob',
+    $push: {pets: {name: 'Sprinkles', type: 'Chubby Unicorn' }}
+})
+    .then(result => {
+        // logic with result -- note this will be the original object by default!
+    })
+    .catch(err => res.json(err));
+
+// UPDATE ONE (alternative)
+// retrieving the object, modifying it, and then save it back to database
+User.findOne({name: 'Bob Ross'})
+    .then(user => {
+        user.name = 'Rob Boss';
+        user.pets.push({name: 'Sprinkles', type: 'Chubby Unicorn'});
+        return user.save();
+    })
+    .then(saveResult => res.json(saveResult))
+    .catch(err => res.json(err));
+
+// ***DELETE***
+// DELETE ALL
+// ...delete all documents of the User collection
+User.remove()
+    .then(deletedUsers => {
+        // logic (if any) with successfully removed deletedUsers object
+    })
+    .catch(err => res.json(err));
+
+// DELETE ONE
+// ...delete 1 document that matches the query object criteria
+User.remove({_id: '5d34d361db64c9267ed91f73'})
+    .then(deletedUser => {
+        // logic (if any) with successfully removed deletedUser object
+    })
+    .catch(err => res.json(err));
+```
