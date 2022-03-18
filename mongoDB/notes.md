@@ -504,3 +504,15 @@ User.remove({_id: '5d34d361db64c9267ed91f73'})
     })
     .catch(err => res.json(err));
 ```
+
+## Additional notes
+- `__v` is mongoDB's version control variable, we do not need to touch it
+- when we use `mongoose` as our ORM, any variable in the form that is not part of the `schema` we created is ignored
+  - if the schema has `name` and `email`, and the form only has `test`, nothing is created
+    - if we had data validation, an error is returned as response
+    - otherwise, there's no error message but nothing gets added to the database either
+- in `updateOne`, we pass in two options
+  - `{ new: true, runValidators: true }`
+  - `new` means the Promise returns the updated object
+    - if not set, the Promise returns the old object
+  - `runValidators` will validate the input before updating
