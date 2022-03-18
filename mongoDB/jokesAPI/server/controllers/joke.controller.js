@@ -12,11 +12,15 @@ module.exports.oneJoke = (req, res) => {
         .catch(err => res.json({ message: "Something went wrong", error: err }));
 }
 
-// module.exports.randomJoke = (req, res) => {
-//     Joke.findOne()
-//         .then(oneJoke => res.json({ joke: oneJoke }))
-//         .catch(err => res.json({ message: "Something went wrong", error: err }));
-// }
+module.exports.randomJoke = (req, res) => {
+    Joke.find()
+        .then(allJokes => {
+            const randNum = Math.floor(Math.random() * allJokes.length)
+            let randomJoke = allJokes[randNum]
+            return res.json({ joke: randomJoke })
+        })
+        .catch(err => res.json({ message: "Something went wrong", error: err }));
+}
 
 module.exports.createJoke = (req, res) => {
     Joke.create(req.body)
