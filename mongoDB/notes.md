@@ -367,6 +367,21 @@
       { timestamps: true }
     );
     ```
+- Nested Documents
+  - is used to avoid joining tables/collections
+  - we place related documents directly inside the current document
+  - very easy to store duplicates in database
+  - a document can be inside another document inside another document
+``` js
+const UserSchema = new mongoose.Schema({
+  fName: String,
+  lname: String,
+  friends: [UserSchema]
+  bankAccounts: [BankAccountSchema]
+})
+// BankAccountSchema created elsewhere
+```
+
 
 ## Commonly used mongoose code
 - more in <a href="http://mongoosejs.com/docs/index.html">documentations</a>
