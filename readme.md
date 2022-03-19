@@ -42,5 +42,5 @@ FOLDER STRUCTURE
     mkdir server
     npx create-react-app client 
     cd client
-    npm install axios
+    npm install axios react-router-dom@5
     ```
