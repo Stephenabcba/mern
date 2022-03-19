@@ -11,7 +11,8 @@ const Form = (props) => {
         console.log(title, price, description)
         axios.post("http://localhost:8000/api/products", { title: title, price: price, description: description })
             .then(result => {
-                console.log(result.data)
+                console.log("Added:", result.data.product)
+                props.setNewestProduct(result.data.product)
                 setTitle("")
                 setPrice(0)
                 setDescription("")
