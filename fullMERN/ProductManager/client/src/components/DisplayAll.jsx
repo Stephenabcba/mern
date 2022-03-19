@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 const DisplayAll = (props) => {
     const [products, setProducts] = useState([])
     useEffect(() => {
+        console.log("Fetching all products...")
         axios.get("http://localhost:8000/api/products")
             .then(response => setProducts(response.data.products))
             .catch(err => console.log(err))

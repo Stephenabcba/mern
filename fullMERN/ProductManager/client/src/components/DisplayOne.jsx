@@ -11,6 +11,7 @@ const DisplayOne = (props) => {
         setId(urlId)
     }
     useEffect(() => {
+        console.log(`Fetching product with _id of ${id}`);
         axios.get(`http://localhost:8000/api/products/${id}`)
             .then(response => setProduct(response.data.product))
             .catch(err => console.log(err))
