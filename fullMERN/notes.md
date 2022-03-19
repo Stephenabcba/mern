@@ -46,21 +46,29 @@
   - create a form in React, and `onSubmit` send an api call through axios
     - `state` and data binding still applies
       - state should be maintained with syntheticEvent handlers
-``` js
-// in React, preferrably a component with form
-// this function runs as the handler for onSubmit for a form
-const onSubmitHandler = e => {
-    //prevent default behavior of the submit
-    e.preventDefault();
-    //make a post request to create a new person
-    axios.post('http://localhost:8000/api/people', {
-        firstName,
-        lastName
-    })
-        .then(res=>console.log(res))
-        .catch(err=>console.log(err))
-}
-```
+    ``` js
+    // in React, preferrably a component with form
+    // this function runs as the handler for onSubmit for a form
+    const onSubmitHandler = e => {
+        //prevent default behavior of the submit
+        e.preventDefault();
+        //make a post request to create a new person
+        axios.post('http://localhost:8000/api/people', {
+            firstName,
+            lastName
+        })
+            .then(res=>console.log(res))
+            .catch(err=>console.log(err))
+    }
+    ```
+- Listing all db entries in React
+  - in Express, create the necessary routes and controllers
+    - this will most likely involve `find()`
+  - in React, display the list
+    - create a new `state` and populate it through api call with `axios.get()` and `useEffect()`
+    - create a display component that `map()` over the array of entries in state
+    - optionally, we can utilize routes with `react-router-dom`
+      - we can place the fetch statements inside the components conditionally rendered by `Switch`
 
 
 
