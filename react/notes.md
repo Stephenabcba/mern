@@ -1009,8 +1009,13 @@ return (<input onClick={e => handleInput(e)}>)
   - a `useEffect` method will execute when component is rendered and every time it is updated
   - Second Argument
     - `useEffect` can also be configured to execute on render + if a given variable has changed
-    - the argument is an array of all variables to track
-      - if the array is empty, meaning track no variables, `useEffect` will only execute on render
+    - the argument is an array of all variables to track (dependencies array)
+      - if the array is empty, meaning track no variables, `useEffect` will execute exactly once on the first render
+      - we can track all variables that change within the logic of `useEffect`
+        - typically, these are `state` variables declared in the component
+      - `useEffect` uses `===` (strictly equals) comparison to check if the variable has changed
+        - thus, even if the `state` was passed in through `props`, `useEffect` will trigger correctly when the state has been changed
+  - as this runs at least once when the component renders, `useEffect` will always run if the component was unmounted and then mounted again due to conditional rendering or `routing`
   - we can then use `useEffect` to ensure that the API call only happens after the component is rendered
   - cleanup on unmounting
     - sometimes, there are functionalities that we wish to run when the component is unmounted
