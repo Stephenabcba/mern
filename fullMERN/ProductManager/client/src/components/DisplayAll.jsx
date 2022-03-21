@@ -30,7 +30,7 @@ const DisplayAll = (props) => {
                 return (
                     <p key={product._id}>
                         <Link key={idx} to={product._id}>{product.title}</Link>
-                        <DeleteButton id={product._id} removeFromList={removeFromList} />
+                        <DeleteButton id={product._id} successCallback={() => removeFromList(product._id)} />
                     </p>
                 )
             })}

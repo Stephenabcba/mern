@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useHistory } from 'react-router-dom'
 import axios from 'axios';
 import DeleteButton from './DeleteButton';
 
 const DisplayOne = (props) => {
+    const history = useHistory()
     const [product, setProduct] = useState({})
     const [id, setId] = useState(1)
     let { id: urlId } = useParams()
@@ -27,7 +28,7 @@ const DisplayOne = (props) => {
                     <p>Description: {product.description}</p>
                     <Link to={`/${id}/edit`}>edit</Link>
                     <div>
-                        <DeleteButton id={id} />
+                        <DeleteButton id={id} successCallback={() => history.push("/")} />
                     </div>
                 </>
                 : ''}

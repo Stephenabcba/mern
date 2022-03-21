@@ -1,12 +1,12 @@
 import './App.css';
 import React, { useState } from 'react';
-import Form from './components/Form';
 import {
   Switch, Route, Link
 } from 'react-router-dom';
 import DisplayAll from './components/DisplayAll';
 import DisplayOne from './components/DisplayOne';
 import EditOne from './components/EditOne';
+import NewProduct from './components/NewProduct';
 
 function App() {
   const [newestProduct, setNewestProduct] = useState({})
@@ -16,7 +16,7 @@ function App() {
       <Link to="/">Go back home</Link>
       <Switch>
         <Route exact path="/">
-          <Form setNewestProduct={setNewestProduct} />
+          <NewProduct setNewestProduct={setNewestProduct} />
           <hr />
           <DisplayAll newestProduct={newestProduct} />
         </Route>
