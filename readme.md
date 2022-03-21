@@ -36,9 +36,9 @@ FOLDER STRUCTURE
   - create all required folder structure and files for backend
   - set up react with `create-react-app` from npx
     ```
+    touch server.js
     npm init -y
     npm install express mongoose cors
-    touch server.js
     mkdir server
     npx create-react-app client 
     cd client
