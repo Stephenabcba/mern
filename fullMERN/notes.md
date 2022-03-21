@@ -69,7 +69,31 @@
     - create a display component that `map()` over the array of entries in state
     - optionally, we can utilize routes with `react-router-dom`
       - we can place the fetch statements inside the components conditionally rendered by `Switch`
-
+- Update and Delete
+  - in Express, create the routes and controller methods
+    - both routes should take an `id`, and the controllers should process based on the id
+    - update: use `put` route and either `findOneandUpdate()` or `updateOne()`
+    - delete: use `delete` route and either `deleteOne()` or `remove()`
+  - in React, create the html elements and api calls
+    - update:
+      - when updating, the current `route` should have an `id` param
+        - get the param with `useParam()`
+      - first, fetch the object to be modified using `axios.fetch()` inside `useEffect()`
+        - call the Express route for the given `id`
+        - populate the fields of the form using `setState()` equivalents
+      - html will most likely involve a `form` that resembles creating a new object
+        - data binding is done with `value={stateName}` for each field
+        - `onChage()` to keep track of the state
+        - `onSubmit` will call the handler function
+      - the handler function
+        -  `preventDefault()` to remove the page refresh
+        -  call the api using `axios.put` at update route with `id` and submit the updated fields
+    - delete:
+      - deleting requires an `id`, which could either be obtained from the object in `ShowAll` or `ShowOne` component, or from the `route` through `useParam()`
+      - html for delete is simply a `button` with `onClick()` calling the handler function
+      - the handler function
+        - call the api using `axios.delete` at the delete route with `id`
+          - we can also choose to remove the item from the list using `filter()` and `setState()` if the api call succeeded
 
 
 
