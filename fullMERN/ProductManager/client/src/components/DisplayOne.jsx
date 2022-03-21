@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import axios from 'axios';
+import DeleteButton from './DeleteButton';
 
 const DisplayOne = (props) => {
     const [product, setProduct] = useState({})
@@ -24,6 +25,10 @@ const DisplayOne = (props) => {
                     <h2>{product.title}</h2>
                     <p>Price: ${product.price.toFixed(2)}</p>
                     <p>Description: {product.description}</p>
+                    <Link to={`/${id}/edit`}>edit</Link>
+                    <div>
+                        <DeleteButton id={id} />
+                    </div>
                 </>
                 : ''}
         </>
