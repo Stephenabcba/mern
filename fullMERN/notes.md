@@ -98,3 +98,27 @@
 
 
 ## Advanced MERN
+- Reusing Components
+  - refactoring the create and update form into the same component:
+    - the form itself can be abstracted out
+      - the `initial values` and `submitHandler` are passed in as `props`
+        - in a create form, initial values are blank
+        - in an update form, initial values are the values from api call
+    - when the create form is submitted, we can add the new item returned into the state
+      ``` js
+      // newItem is the returned object when we did axios.post()
+      setState([...state,newItem])
+      ```
+  - refactpring the delete button:
+    - the button button itself can be a component
+    - 2 `props` to pass in: `id` of the item to delete, and `callback function` to execute when successfull
+    - the callback function:
+      - in a showAll component: `filter()` out the item with the given `id` when successful
+      - in a showOne/editOne component: `history.push()` back to the main page
+- Presentational and Container Components
+  - presentational components take in props and display them, sometimes executing callback functions passed through props as well
+  - container components will hold state and logic, such as `fetch` and `useState`
+  - it is not always necessary to separate out presentational and container components
+
+
+## Additional info
