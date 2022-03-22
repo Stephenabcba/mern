@@ -119,6 +119,34 @@
   - presentational components take in props and display them, sometimes executing callback functions passed through props as well
   - container components will hold state and logic, such as `fetch` and `useState`
   - it is not always necessary to separate out presentational and container components
+- Styling libraries (Material-UI)
+  - React Components pre-built with CSS for easy styling
+    ```
+    npm install @material-ui/core
+    ```
+  - See documentations for more details
+  - other libraries include reactstrap and semantic-ui
+- Validations
+  - validations are done in the backend in Express
+    - details on Express validations are in Express Notes
+  - by default, validations errors will not go to the `catch` clause in React `fetch`
+    - we have to explicitly set the response code 400 in Express to trigger errors in React
+    ``` js
+    // in the catch block within Controller in Express server
+    return response.status(400).json(err)
+    ```
+  - after the `catch` clause in React is correctly triggered, we can display the error messages in React
+    - we will create a `state` to hold the errors
+    - the state will be populated as an array in the `catch` clause of fetch
+    - all errors are returned from the server in the `error` object, with the field as `key` and more nested `objects` as the value
+      - the error message we wrote is then stored in `error.fieldName.message`, where fieldName is the actual name of the model, such as name, age, etc.
+      - the full patch in the error clause is `err.response.data.errors.fieldName.message`
+    - after the error array in state in the object, we can list them using `.map()` in the html
 
 
 ## Additional info
+- in express validations, the error message can use `{PATH}` to get the field that the validation failed on
+  - ex: the "age" field will have the path of age
+- if express validations do not include `required` set to true on the field, an object can be created without that field
+- when changing the server, test in postman first!
+  - if everything works in postman, any api problem in React is from React
