@@ -1,0 +1,53 @@
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  color:#FB5607;
+}
+
+p, h2 {
+  color: #d3a424;
+}
+
+.error {
+  color: #FF006E;
+  background-color: #f8bbd5;
+  padding: 10px 40px;
+  border: 1px #fa4694 solid;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+th, td, span, input {
+  color: #8338EC;
+}
+
+a {
+  color: #3A86FF;
+  text-decoration: none;
+}
+
+button {
+  background-color: #FB5607;
+  color: white;
+  border: 1px #FFBE0B solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+input {
+  margin: 20px;
+  padding: 10px 5px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+td, th {
+  padding: 10px 20px;
+}
