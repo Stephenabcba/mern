@@ -140,7 +140,7 @@
     - the state will be populated as an array in the `catch` clause of fetch
     - all errors are returned from the server in the `error` object, with the field as `key` and more nested `objects` as the value
       - the error message we wrote is then stored in `error.fieldName.message`, where fieldName is the actual name of the model, such as name, age, etc.
-      - the full patch in the error clause is `err.response.data.errors.fieldName.message`
+      - the full path in the error clause is `err.response.data.errors.fieldName.message`
     - after the error array in state in the object, we can list them using `.map()` in the html
 
 
