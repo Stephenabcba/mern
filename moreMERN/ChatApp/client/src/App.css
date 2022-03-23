@@ -1,0 +1,26 @@
+.App {
+  text-align: center;
+}
+
+.message {
+  background-color: lightgray;
+  padding: 15px;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 30%;
+  margin: 10px 0px;
+  margin-left: 20px;
+}
+
+.my-message {
+  background-color: skyblue;
+  position: relative;
+  left: calc(70% - 70px);
+}
+
+.scroll {
+  overflow: auto;
+  display:flex;
+  flex-direction: column-reverse;
+  height: 70vh;
+}
