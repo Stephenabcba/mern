@@ -73,3 +73,24 @@ FOLDER STRUCTURE
     cd client
     npm install axios react-router-dom@5
     ```
+2. Set up server backend
+  - create the models, controllers, routes, and server.js
+  - test EVERY route in postman to make sure that it is working
+    - if React has API problems later in the front end, the problem is in React
+3. Create React frontend
+  - typically, every view is a component
+    - more components could be created as needed
+  - make API calls to the backend to retrieve the necessary information
+    - a display all component will needs a list of all items
+    - a display one component will need the specific item by id
+    - a create one component will post the submitted form to the server
+      - the post route returns the created item
+      - this item can be added to the list in display all if needed
+      - if validation failed, the returned response contains the error messages
+        - we can display the messages in the form
+    - an update one component will need 2 api calls
+      - first api call retrieves the current information to pre-populate the form
+      - second api call will put the submitted form back to the server
+        - the server will return the updated object
+    - a delete button will send a delete call to the server
+      - we can dynamically delete the item from the display all component using .filter() using the deleted item's id
