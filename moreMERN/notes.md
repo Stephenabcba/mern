@@ -453,6 +453,13 @@ npm install socket.io
   - The authentication logic can be written as middleware
     - checks the verifies the usertoken
     - the function will be called when certain routes require authentication
+  - Multiple middlewares can be run in the same route processing function
+    - if there is an error, we can directly return a response with `res.status().json()`
+      - return the required error messages
+    - if the current middleware ran successfully, move on to the next middleware when `next()` is called
+  - Middlewares are able to add attributes to the `req` (request) object
+    - for example, the authenticate middleware could add the content saved in cookies into `req` for the middlewares that follow to use
+      - another middleware could use `_id` to check whether the user has the authority (permission) to perform the action
   ``` js
   // jwt.config.js
   const jwt = require("jsonwebtoken");
@@ -476,6 +483,8 @@ npm install socket.io
     app.post("/api/login", Users.login);
     // this route now has to be authenticated
     app.get("/api/users", authenticate, Users.getAll);
+    // multiple middlewares, authenticate runs first, then anotherMiddleWare
+    app.get("/api/users/somethingelse", authenticate, anotherMiddleWare, Users.getAll);
   }
   ```
   - in the front end:
